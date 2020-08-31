@@ -16,40 +16,6 @@ Then as a bonus, further analysis of the temperature and precipitation data is p
     * [Hawaii Measurements](Resources/hawaii_measurements.csv) - contains the precipitation and temperature data for each station over several years. *Not used as a data source for this challenge; only used for validation.*
     * [Hawaii Stations](Resources/hawaii_stations.csv) - contains the details about each station. *Not used as a data source for this challenge; used only for validation.*
 
-
-## Steps to Run the Scripts
-
-The database created for this challenge is called **EmployeeSQL**. To create the tables, run the *schemas.sql* file in the order laid out in the file starting with the **Create tables** section. The table scripts should be run in the following order:
-1. departments
-2. titles
-3. salaries
-4. employees
-5. dept_emp
-6. dept_manager
-
-After that portion of the script has been run, load the tables by importing the CSV files in the following order:
-1. departments
-2. salaries
-3. titles
-4. employees
-5. dept_emp
-6. dept_manager
-
-Once all the data has been loaded into the SQL tables, the rest of the *schemas.sql* script can be run starting with the **Create FKs** section. Then follow that with running the **Create Indexes** section. That should get the tables ready for querying.
-
-The queries in the *queries.sql* file can be run in any order as they are not dependent on one another. They are, however, listed in the order of the questions asked in this challenge.
-
-## Bonus Section
-
-The purpose of the *Bonus* section is to determine if the data is fake or not. To help determine this, a histogram and bar chart were created.
-
-### Requirements
-
-In order for the *Jupyter Notebook* to connect to the *PostgreSQL* database, some steps need to be taken first:
-1. The database should be named `EmployeeSQL`.
-2. The user name for this database is `postgres` so an account using that name must exist with access to the *EmployeeSQL* database.
-3. Create a text file called config.py and save it in the *EmployeeSQL* folder. This file should have an entry of `postgres_key = ` and then the password used by the `postgres` account to connect to the *PostgreSQL* database.
-
 ### Analysis
 
 After creating the histogram and seeing that most of the employees' salaries fell within the $40,000 - $50,000 range, which was the lowest salary range, that seemed a little perplexing.
