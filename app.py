@@ -35,11 +35,12 @@ app = Flask(__name__)
 def welcome():
     """List all available api routes."""
     return (
-        f"Available Routes:<br/>"
-        f"<a href='/api/v1.0/precipitation'>precipitation</a><br/>"
-        f"<a href='/api/v1.0/stations'>stations</a><br/>"
-        f"<a href='/api/v1.0/tobs/USC00519281'>tobs/USC00519281</a><br/>"
-#        f"<a href='/api/v1.0/countryitemtotals/USA'>countryitemtotals/USA</a><br/>"
+        f"<strong>Available Routes:</strong><br/>"
+        f"<li><a href='/api/v1.0/precipitation'>Precipitation</a></li><br/>"
+        f"<li><a href='/api/v1.0/stations'>Stations</a></li><br/>"
+        f"<li><a href='/api/v1.0/tobs/USC00519281'>Station USC00519281 Temperatures for most recent 12 months</a></li><br/>"
+        f"<li><a href='/api/v1.0/<start>'>Min, Avg, Max Temperature Stats (Start Date) - replace 'start' in URL with start date in yyyy-mm-dd format</a></li><br/>"
+        f"<li><a href='/api/v1.0/<start>/<end>'>Min, Avg, Max Temperature Stats (Start and End Dates) - replace 'start' and 'end' in URL with dates in yyyy-mm-dd format</a></li><br/>"
     )
 
 @app.route("/api/v1.0/precipitation")
@@ -47,7 +48,7 @@ def precipitation():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    # Query all countries in billing history
+    # Query precipiation data for the last year of available data
     results = session.query(Measurement.date, Measurement.prcp).filter(Measurement.date >= '2016-08-23').filter(Measurement.prcp != "None").order_by(Measurement.date).all()
 
     session.close()
@@ -91,49 +92,42 @@ def tobs(value):
     # Convert list of tuples into a normal list
     all_results = list(np.ravel(results))
 
+    #all_results = []
+    #for date, tobs in results:
+    #    precipitation_dict = {}
+    #    precipitation_dict["date"] = date
+    #    precipitation_dict["tobs"] = tobs
+    #    all_results.append(precipitation_dict)
+
     return jsonify(all_results)
 
-    ## Create a dictionary from the row data and append to a list of all_results
-    ##all_results = []
-    ##for item in results:
-    ##    item_dict = {}
-    ##    item_dict["date"] = item[0]
-    ##    item_dict["tobs"] = item[1]
-    ##    all_results.append(item_dict)
+@app.route("/api/v1.0/<start>", defaults={'end': None})
+@app.route("/api/v1.0/<start>/<end>")
 
-    ##return jsonify(all_results)
+def tobssumstats(start, end):
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
 
+    # Return a JSON list of the minimum temperature, the average temperature, and the max temperature for a given start or start-end range.
+    # Got help with the default in the app.route from Audrius Kažukauskas' reply at https://stackoverflow.com/questions/14032066/can-flask-have-optional-url-parameters?rq=1
+    # Got the idea for splitting up the query from padamsethia's reply at https://www.reddit.com/r/flask/comments/8y92c0/help_sqlalchemy_multiple_filter_queries/
 
-#@app.route("/api/v1.0/<start>/", defaults={"end": "2017-08-23"})
-#@app.route("/api/v1.0/<start>/<end>")
+    query = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+    filter(Measurement.date >= start)
+    
+    if end:
+        query = query.filter(Measurement.date <= end)
+    
+    results = query.all()
 
-#def countryitemtotals(value):
-#    # Create our session (link) from Python to the DB
-#    session = Session(engine)
+    #results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).filter(Measurement.date >= start).filter(Measurement.date <= end).all()
 
-#    # Query all countries' invoice totals
-#    results = session.query(func.sum(Items.UnitPrice * Items.Quantity)).filter(Invoices.InvoiceId == Items.InvoiceId).filter(Invoices.BillingCountry == value).scalar()
+    session.close()
 
-#    session.close()
+    # Convert list of tuples into normal list
+    all_results = list(np.ravel(results))
 
-#   # Create a dictionary from the results
-#    item_dict = {'country':value, 'total':float(results)}
-
-#   return jsonify([item_dict])
-
-#@app.route("/api/v1.0/postcodeitemtotals/<value>")
-#def postcodeitemtotals(value):
-#    session = Session(engine)
-#    results = session.query(Invoices.BillingPostalCode, func.sum(Items.UnitPrice * Items.Quantity)).filter(Invoices.InvoiceId == Items.InvoiceId).filter(Invoices.BillingCountry == value).group_by(Invoices.BillingPostalCode).order_by(func.sum(Items.UnitPrice * Items.Quantity).desc()).all()
-#    session.close()
-#    all_results = []
-#    for item in results:
-#        item_dict = {}
-#        item_dict["postcode"] = item[0]
-#        item_dict["total"] = float(item[1])
-#        all_results.append(item_dict)
-
-#    return jsonify(all_results)
+    return jsonify(all_results)
 
 if __name__ == '__main__':
     app.run(debug=True)
