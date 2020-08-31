@@ -18,18 +18,11 @@ Then as a bonus, further analysis of the temperature and precipitation data is p
 
 ### Analysis
 
-After creating the histogram and seeing that most of the employees' salaries fell within the $40,000 - $50,000 range, which was the lowest salary range, that seemed a little perplexing.
-
-![sql.png](EmployeeSQL/histogram.PNG)
-
-To find out how those salaries broke out by title, a bar chart was then created.
-
-![barchart.png](EmployeeSQL/barchart.PNG)
-
-Based on the results from that, it was concluded that the data was indeed fake as the highest paying jobs were staff positions and senior level positions were making less than their lower level counterparts. This conclusion was reaffirmed after searching for employee number *499942* and finding out that this employee's name is *April Foolsday*.
+After loading the climate data from the *hawaii.sqlite* file, I need to see what was actually in there in regards to tables/classes, columns, data types and data itself. Ran the Inspector to see column names and data types in both tables (*measurement* and *station*). Then queried the tables to take a look at the data. 
 
 ## Notes
 
-The *barchart.png* and *histogram.png* files saved in the *EmployeeSQL* folder are images from the *Jupyter Notebook* **Bonus** section.
+The query for **** in the Jupyter Notebook isn't exactly the same as the one used in the *app.py* file. I wasn't sure if the approach I used in the Jupyter Notebook would work in with the API so I revised my query for the API. Both returned the same results and I got to use two different approaches to pull the data so I kept them both.
+
 
 Just used one query to get all the data needed in the **Bonus** section and then used dataframes and groupbys to get what was needed for each chart. Did it with 2 queries originally, which was much faster, but figured I'd work on my *pandas*, *Python*, and *Jupyter Notebook* skills by using just one query and then manipulating that.
