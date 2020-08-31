@@ -1,5 +1,5 @@
-# sqlalchemy-challenge
-# Employee Database: A Mystery in Two Parts
+## sqlalchemy-challenge
+# A Well-Timed Trip to Hawaii
 
 ## Overview
 
@@ -7,19 +7,18 @@ Employee data from the 1980s and 1990s was stored in six CSV files. In order to 
 
 Then as a bonus, the goal was to determine if the data was fake using a histogram and bar chart.
 
-### Files
+### Files and Folders
 
 There are two folders in the main **sql-challenge** folder that hold files used in this challenge:
 
 #### 1. data Folder
 
-* [data](data/) - this folder contains the 6 CSV files of employee data used as the date source files 
-    * [Departments](data/departments.csv) - the various departments of which an employee could be a member
-    * [Department Employee](data/dept_emp.csv) - combines departments with employee numbers
-    * [Department Managers](data/dept_manager.csv) - combines departments and their managers
-    * [Employees](data/employees.csv) - the employees' data
-    * [Salaries](data/salaries.csv) - salary data for the employees
-    * [Titles](data/titles.csv) - the various titles an employee can have
+* **Jupyter Notebook** (climate_starter.jpynb) - The Jupyter Notebook file that contains the scripts, plot, histogram, and analysis for the main challenge and a bar chart for the **BONUS** section
+* [Flask API](app.py) - this file is the script for the Flask API. It contains the various routes to query the data
+* [Resources](Resources/) - this folder contains the date source files
+    * **hawaii.sqlite** - the sqlite file used to source the Jupyter Notebook and for the analysis
+    * [Hawaii Measurements](Resources/hawaii_measurements.csv) - contains the precipitation and temperature data for each station over several years. *Not used as a data source for this challenge; only used for validation.*
+    * [Hawaii Stations](Resources/hawaii_stations.csv) - contains the details about each station. *Not used as a data source for this challenge; used only for validation.*
 
 
 #### 2. EmployeeSQL Folder
@@ -29,7 +28,7 @@ All the files that were created during this challenge are stored in this folder
 * [Table Schemas](EmployeeSQL/schemas.sql) - this file has the scripts to create all the database tables including primary and foreign keys and some indexes
 * [Queries](EmployeeSQL/queries.sql) - this file contains the scripts used for the analysis; each question is separated into its own query statement
 * [ERD](EmployeeSQL/ERD.jpeg) - this file is an image of the database diagram created using *GenMyModel*
-* **Jupyter Notebook** (EmployeeSQL/salaries.jpynb) - The Jupyter Notebook file that contains the scripts, histogram and bar chart for the **BONUS** section
+
 * **config.py** (EmployeeSQL/config.py) - This file will have to be created by the user and saved in the **EmployeeSQL** folder. This file contains the password used to connect to the database from within the Jupyter Notebook
 
 ## Steps to Run the Scripts
