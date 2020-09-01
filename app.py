@@ -70,7 +70,7 @@ def stations():
     session = Session(engine)
 
     # Query all stations in Station
-    results = session.query(Station.station).group_by(Station.station).all()
+    results = session.query(Station.name).group_by(Station.name).all()
 
     session.close()
 
