@@ -36,11 +36,12 @@ def welcome():
     """List all available api routes."""
     return (
         f"<strong>Available Routes:</strong><br/>"
+        f"<p></p>"
         f"<li><a href='/api/v1.0/precipitation'>Precipitation</a></li><br/>"
         f"<li><a href='/api/v1.0/stations'>Stations</a></li><br/>"
-        f"<li><a href='/api/v1.0/tobs/USC00519281'>Station USC00519281 Temperatures for most recent 12 months</a></li><br/>"
-        f"<li><a href='/api/v1.0/<start>'>Min, Avg, Max Temperature Stats (Start Date) - replace 'start' in URL with start date in yyyy-mm-dd format</a></li><br/>"
-        f"<li><a href='/api/v1.0/<start>/<end>'>Min, Avg, Max Temperature Stats (Start and End Dates) - replace 'start' and 'end' in URL with dates in yyyy-mm-dd format</a></li><br/>"
+        f"<li><a href='/api/v1.0/tobs/USC00519281'>Station WAIHEE 837.5, HI US Temperatures for one year prior to the most recent 12 months available</a></li><br/>"
+        f"<li><a href='/api/v1.0/<start>'>Min, Avg, Max Temperature Stats (Start Date)</a>   **Replace 'start' in URL with start date in yyyy-mm-dd format</li><br/>"
+        f"<li><a href='/api/v1.0/<start>/<end>'>Min, Avg, Max Temperature Stats (Start and End Dates)</a>   **Replace 'start' and 'end' in URL with dates in yyyy-mm-dd format</li><br/>"
     )
 
 @app.route("/api/v1.0/precipitation")
@@ -84,20 +85,13 @@ def tobs(value):
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    # Query all datas and temperatures of the most active station for the last year of data
-    results = session.query(Measurement.date, Measurement.tobs).filter(Measurement.date >= "2016-08-18").filter(Measurement.station == value).order_by(Measurement.date).all()
+    # Query all dates and temperatures of the most active station for the previous year based on the last year of data dates
+    results = session.query(Measurement.date, Measurement.tobs).filter(Measurement.date >= "2015-08-18").filter(Measurement.date < "2016-08-18").filter(Measurement.station == value).order_by(Measurement.date).all()
 
     session.close()
 
     # Convert list of tuples into a normal list
     all_results = list(np.ravel(results))
-
-    #all_results = []
-    #for date, tobs in results:
-    #    precipitation_dict = {}
-    #    precipitation_dict["date"] = date
-    #    precipitation_dict["tobs"] = tobs
-    #    all_results.append(precipitation_dict)
 
     return jsonify(all_results)
 
