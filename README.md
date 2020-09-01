@@ -22,17 +22,23 @@ After loading the climate data from the *hawaii.sqlite* file, I need to see what
 
 The analysis was separated out into two sections--one for precipitation and one for stations. The precipitation analysis was looking at data for the last year of available dates. Based on the plot created and the summary statistics, even though there are some wet days, for the most part, there are many more days with 0 to less than 0.13 of an inch of precipitation.
 
-## Notes
-
-The query for **** in the Jupyter Notebook isn't exactly the same as the one used in the *app.py* file. I wasn't sure if the approach I used in the Jupyter Notebook would work in with the API so I revised my query for the API. Both returned the same results and I got to use two different approaches to pull the data so I kept them both.
-
-Some of the stations did not have precipitation data for some of the dates in the date range. I filtered those records out of the dataset I used for analysis. They didn't have 0 precipiation, they just had no results collected so I figured that information should be removed. There was temperatuere data for all stations and all dates so nothing was filtered out for the temperature analysis portion.
-
 ![precipitation_plot.png](images/precipitation_plot.PNG)
 
 Next was to analysis the stations and their temperatures. Found that station USC00519281 was the most active station with temperatures ranging from 59 degrees F to 85 degrees F but averaging 71.7 degrees F. But based on just the last year of available data, the most common temperature range is from about 74 degrees F to about 78 degrees F.
 
 ![temperature.png](images/temperature.PNG)
 
+### Climate App
 
-Just used one query to get all the data needed in the **Bonus** section and then used dataframes and groupbys to get what was needed for each chart. Did it with 2 queries originally, which was much faster, but figured I'd work on my *pandas*, *Python*, and *Jupyter Notebook* skills by using just one query and then manipulating that.
+Created a Flask API to utilize most of the queries from the Jupyter Notebook analysis. By using this API, you can see the precipitation date from the last year of available data in a JSON dictionary format. You can also view a list of the stations. Temperature observations from the last year for station USC00519281.
+
+There are also two options to view the minimum, average and maximum temperatures for date ranges. The first one lets you, once you click on the link, add your start date in the URL by replacing the **'start'** tag. Enter the date in *yyyy-mm-dd* format. This will return data for all stations from that start date through the end of the dataset, which is 8/23/2017.
+
+The second option, once you click the link, lets you enter your start and end dates by replacing the **'start'** and **'end'** tags in the URL. Enter the dates in *yyyy-mm-dd* format for this as well.
+
+## Notes
+
+The queries for the stations and the temperatures at the top station in the Jupyter Notebook aren't exactly the same as the ones used in the *app.py* file. I wasn't sure if the approach I used in the Jupyter Notebook would work with the API so I revised my queries for the API. Both returned the same results and I got to use two different approaches to pull the data so I kept them both.
+
+Some of the stations did not have precipitation data for some of the dates in the date range. I filtered those records out of the dataset I used for analysis. They didn't have 0 precipiation, they just had no results collected so I figured that information should be removed. There was temperatuere data for all stations and all dates so nothing was filtered out for the temperature analysis portion.
+
